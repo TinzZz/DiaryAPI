@@ -18,6 +18,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	<ProjectReference Include="..\Diary.DAL\Diary.DAL.csproj" />
 	<ProjectReference Include="..\Diary.Application\Diary.Application.csproj" />
+	<ProjectReference Include="..\Diary.Producer\Diary.Producer.csproj" />
+	<ProjectReference Include="..\Diary.Consumer\Diary.Consumer.csproj" />
   </ItemGroup>
 
 </Project>
