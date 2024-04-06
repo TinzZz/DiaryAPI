@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Diary.Producer.Interfaces
 {
-    internal interface IMessageProducer
+    public interface IMessageProducer
     {
         void SendMessage<T>(T message, string routingKey, string? exchange = default);
     }

@@ -11,9 +11,9 @@ namespace Diary.Producer
 {
     internal class Producer : IMessageProducer
     {
-        public void SendMessage<T>(T message, string routingKey, string? exchange = null)
+        public void SendMessage<T>(T message, string routingKey, string? exchange = default)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost|" };
+            var factory = new ConnectionFactory() { HostName = "localhost" };
             var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
 
