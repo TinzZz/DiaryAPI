@@ -8,12 +8,17 @@ using Diary.Domain.Interfaces.Services;
 using Diary.Domain.Interfaces.Validations;
 using Diary.Domain.Result;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using Diary.Producer.Interfaces;
+using Diary.Domain.Settings;
+
 
 namespace Diary.Application.Services
 {
@@ -24,15 +29,20 @@ namespace Diary.Application.Services
         private readonly IReportValidator _reportValidator;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IMessageProducer _messageProducer;
+        private readonly IOptions<RabbitMqSettings> _rabbitMqOptions;
 
         public ReportService(IBaseRepository<Report> reportRepository, ILogger logger,
-            IBaseRepository<User> userRepository, IReportValidator reportValidator, IMapper mapper)
+            IBaseRepository<User> userRepository, IReportValidator reportValidator, IMapper mapper, IMessageProducer messageProducer, 
+            IOptions<RabbitMqSettings> rabbitMqOptions)
         {
             _reportRepository = reportRepository;
             _logger = logger;
             _userRepository = userRepository;
             _reportValidator = reportValidator;
             _mapper = mapper;
+            _messageProducer = messageProducer;
+            _rabbitMqOptions = rabbitMqOptions;
         }
 
         /// <Inheritdoc />
@@ -59,6 +69,8 @@ namespace Diary.Application.Services
                     UserId = user.Id
                 };
                 await _reportRepository.CreateAsync(report);
+
+                _messageProducer.SendMessage(report, _rabbitMqOptions.Value.RoutingKey, _rabbitMqOptions.Value.ExchangeName);
 
                 return new BaseResult<ReportDTO>()
                 {

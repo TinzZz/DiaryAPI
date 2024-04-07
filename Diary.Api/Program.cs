@@ -2,6 +2,9 @@ using Diary.DAL.DependencyInjection;
 using Diary.Application.DependencyInjection;
 using Serilog;
 using Diary.Domain.Settings;
+using Diary.Consumer.DependencyInjection;
+using Diary.Producer.DependensyInjection;
+
 namespace Diary.Api
 {
     public class Program
@@ -11,6 +14,7 @@ namespace Diary.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(nameof(RabbitMqSettings)));
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.DefaultSection));
             builder.Services.AddControllers();
             builder.Services.AddAuthenticationAndAuthorization(builder);
@@ -23,6 +27,8 @@ namespace Diary.Api
             builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
             builder.Services.AddDataAccessLayer(builder.Configuration);
             builder.Services.AddApplication();
+            builder.Services.AddProducer();
+            builder.Services.AddConsumer();
 
             var app = builder.Build();
 
