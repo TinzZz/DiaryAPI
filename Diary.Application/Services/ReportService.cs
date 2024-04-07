@@ -31,10 +31,10 @@ namespace Diary.Application.Services
         private readonly ILogger _logger;
         private readonly IMessageProducer _messageProducer;
         private readonly IOptions<RabbitMqSettings> _rabbitMqOptions;
-               
 
         public ReportService(IBaseRepository<Report> reportRepository, ILogger logger,
-            IBaseRepository<User> userRepository, IReportValidator reportValidator, IMapper mapper, IMessageProducer messageProducer, IOptions<RabbitMqSettings> rabbitMqOptions)
+            IBaseRepository<User> userRepository, IReportValidator reportValidator, IMapper mapper, IMessageProducer messageProducer, 
+            IOptions<RabbitMqSettings> rabbitMqOptions)
         {
             _reportRepository = reportRepository;
             _logger = logger;

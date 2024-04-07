@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Diary.Producer
 {
-    internal class Producer : IMessageProducer
+    public class Producer : IMessageProducer
     {
         public void SendMessage<T>(T message, string routingKey, string? exchange = default)
         {
